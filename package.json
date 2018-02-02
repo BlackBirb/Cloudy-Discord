@@ -1,0 +1,19 @@
+{
+  "name": "cloudy-discord",
+  "version": "1.0.0",
+  "description": "Personalized Discord bot for CloudsDaleFM",
+  "main": "./src/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "BlackBird",
+  "license": "MPL-2.0",
+  "dependencies": {
+    "discord.js": "hydrabolt/discord.js",
+    "level": "^2.0.0",
+    "node-opus": "^0.2.7",
+    "request": "^2.83.0",
+    "snekfetch": "^3.5.1",
+    "wget-improved": "^1.5.0"
+  }
+}

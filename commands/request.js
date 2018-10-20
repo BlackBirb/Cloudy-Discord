@@ -42,7 +42,7 @@ module.exports = {
         usage: "<nazwa piosenki>"
     },
     process: async (msg, args) => {
-        if(args[0] && args[0].toLowerCase() === "limity") return msg.reply(`Możesz zamówić ${limits[0]} piosenek na ${limits[1] / 60 /1000} minut`)
+        if(args[0] && ["limity", "limits", "limit"].includes(args[0].toLowerCase())) return msg.reply(`Możesz zamówić ${limits[0]} piosenek na ${limits[1] / 60 /1000} minut`)
 
         const userTitle = args.join(" ")
         try {

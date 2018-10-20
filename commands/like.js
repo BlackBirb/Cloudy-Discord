@@ -24,7 +24,7 @@ module.exports = {
         }
 
         try {
-            let body = await get("data/playing")
+            let body = await get("data/now")
             let res = body.track
             if(!likes.has(res)) 
                 likes.set(res, new Array())

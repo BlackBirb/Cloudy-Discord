@@ -2,7 +2,7 @@ function now() {
     return `<${new Date().toLocaleString()}>`
 }
 
-module.exports = async (client, msg) => {
+module.exports = (client, msg) => {
     if(msg.author.bot) return;
     if(msg.channel.id === client.static.acceptChannel.id) {
         if(msg.content.toLowerCase() !== "akceptuje regulamin") msg.react(client.static.nopeEmoji)
@@ -30,9 +30,7 @@ module.exports = async (client, msg) => {
     })
 
     try {
-        msg.channel.startTyping()
-        await command.process(msg, args) // command process should return a promise
-        msg.channel.stopTyping(true)
+        command.process(msg, args)
     }
     catch(err) {
         console.error(err)

@@ -1,4 +1,5 @@
-const passStrings = ["akceptuje regulamin","akceptuję regulamin"]
+const passStrings = ["akceptuje regulamin","akceptuję regulamin","akceptuje"]
+const kickStrings = ["nie akceptuje regulaminu", "nie akceptuję regulaminu", "nie akceptuje", "nie akceptuję", "nie", "naprawcie regulamin"]
 
 function sleep(time) {
     return new Promise((res, rej) => {
@@ -7,7 +8,7 @@ function sleep(time) {
 }
 
 function clear(member, channel) {
-    let messages = channel.messages.filterArray(m => m.author.id === member.user.id)
+    let messages = channel.messages.filter(m => m.author.id === member.user.id).array()
     messages.push(botMessages.get(member.id))
     if(messages.length < 2) {
         return messages.forEach(m => m.delete())
@@ -20,10 +21,10 @@ let botMessages = new Map();
 module.exports = async (client, member) => {
     const config = client.config
     if(member.user.bot) 
-    return member.addRole(config.roles.ekipa);
+    return member.roles.add(config.roles.ekipa);
 
     let channel = client.static.acceptChannel
-    await member.addRole(config.roles.new)
+    await member.roles.add(config.roles.new)
     await sleep(1000)
 
     const embed = {
@@ -50,7 +51,7 @@ module.exports = async (client, member) => {
             },
             {
                 "name": "<:thonkang:371329969500192768>",
-                "value": "Udało ci sie? Świetnie, teraz napisz **`Akceptuje regulamin`** na tym kanale potwierdzając przy tym, że sie z nim zgadzasz i będziesz go przestrzegał! *Masz na to 20 min.*"
+                "value": "Udało ci sie? Świetnie, teraz napisz **`Akceptuje regulamin`** na tym kanale potwierdzając przy tym, że sie z nim zgadzasz i będziesz go przestrzegał! Jestem botem więc musisz dokładnie napisać **`Akceptuje regulamin`** *Masz na to 20 min.*"
             }
         ]
     };
@@ -58,15 +59,22 @@ module.exports = async (client, member) => {
 
     botMessages.set(member.id, message)
 
-    channel.awaitMessages(m => {
-        return ( m.author.id === member.id && passStrings.includes(m.content.toLowerCase()))}, 
+    channel.awaitMessages(m => ( m.author.id === member.id 
+            && (passStrings.includes(m.content.toLowerCase())) 
+            || kickStrings.includes(m.content.toLowerCase()) 
+        ), 
         {max: 1, time: config.kickAfter *  1000}
     ).then(c => {
         if(c.size < 1) 
             member.kick("Did not accept rules")
         else {
-            member.removeRole(config.roles.new)
-            member.addRole(config.roles.user)
+            if(kickStrings.includes(c.first().content.toLowerCase())) {
+                member.kick("Wyrażanie własnej opinii")
+            }
+            else {
+                member.roles.remove(config.roles.new)
+                member.roles.add(config.roles.user)
+            }
         }
         clear(member, channel)
     }).catch(c => {

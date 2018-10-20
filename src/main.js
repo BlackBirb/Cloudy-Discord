@@ -44,12 +44,12 @@ class Bot extends Discord.Client {
     }
 
     readyEvent() {
-        let guild = this.guilds.first()
+        let guild = this.guilds.resolve('352404452029890570')
         this.static = {
             nopeEmoji: guild.emojis.get(this.config.errEmoji),
             ekipaRole: guild.roles.get(this.config.roles.ekipa),
             acceptChannel: guild.channels.get("352406832150478859"),
-            regulaminChannel: guild.channels.find("name", "regulamin")
+            regulaminChannel: guild.channels.find(ch => ch.name === "regulamin")
         }
         this.setInterval(_=> {
             this.setPlaying(false)
@@ -72,14 +72,14 @@ class Bot extends Discord.Client {
         },10000)
     }
 
-    async setPlaying(title) {
+    async setPlaying(track) {
         try {
-            if(!title) {
-                const body = await apiGET("data/playing")
-                title = body.track
+            if(!track) {
+                const data = await apiGET("data/now")
+                track = data.track
             }
-            if(this.user.presence.activity && title === this.user.presence.activity.name) return;
-            if(setGame) this.user.setActivity(title)
+            if(this.user.presence.activity && track === this.user.presence.activity.name) return;
+            if(setGame) this.user.setActivity(track)
         } catch(err) {
             console.log(now(),"Error at getting song titile to set as game.")
             return console.error(err)

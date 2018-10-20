@@ -6,7 +6,7 @@ module.exports = {
     process: async (msg, args) => {
         const recorder = msg.client.streamRecorder
 
-        if(msg.client.static.ekipaRole.comparePositionTo(msg.member.highestRole) > 0) return msg.reply("Nie masz wystarczających uprawnień!")
+        if(msg.client.static.ekipaRole.comparePositionTo(msg.member.roles.highest) > 0) return msg.reply("Nie masz wystarczających uprawnień!")
         recorder.channel = msg.channel
 
         if(args[0].toLowerCase() === "start") {

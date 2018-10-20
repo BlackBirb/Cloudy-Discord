@@ -6,8 +6,8 @@ module.exports = {
     process: async msg => {
         try {
             const { client } = msg
-            if(!msg.member.voiceChannel) return msg.reply("Musisz być na kanale głosowym!")
-            const channel = msg.member.voiceChannel
+            if(!msg.member.voice.channel) return msg.reply("Musisz być na kanale głosowym!")
+            const channel = msg.member.voice.channel
             const connection = await channel.join()
             if(client.radio.playing) {
                 client.radio.channel = channel, 
@@ -15,7 +15,7 @@ module.exports = {
                 client.radio.playing = true 
                 return msg.reply("Kanał zmienony!")
             }
-            const dispatcher = connection.playArbitraryInput(client.config.listenURI)
+            const dispatcher = connection.play(client.config.listenURI)
             client.radio = { channel, connection, dispatcher, cooldown: false, playing: true }
             return msg.reply("Dołączyłem do kanału i puszczam radio! Aby przestać użyj komendy cd!leave")
         } catch(err) {

@@ -7,7 +7,7 @@ module.exports = {
     },
     process: async msg => {
         try {
-            const { track } = await get("data/playing")
+            const { track } = await get("data/now")
             msg.client.setPlaying(track)
             return msg.channel.send(`Aktualnie gramy piosenke: **${track}**`)
         } catch(err) {

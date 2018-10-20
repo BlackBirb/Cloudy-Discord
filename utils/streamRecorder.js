@@ -44,6 +44,8 @@ module.exports = class Recorder extends EventEmitter {
         this.worker.req.abort()
         this.recording = false
         this.channel = null;
+        clearTimeout(this.timeout)
+        this.timeout = null
         return true
     }
 
